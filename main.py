@@ -1,5 +1,4 @@
-print("Welcome to the encryption/decryption program!!!")
-print("What would you like to do today?")
+import streamlit as st
 
 characterset = ("abcdefghijklmnopqrstuvwxyz0123456789!?/,.:;+=-<>@#$%^&*")
 num_char = len(characterset)
@@ -32,26 +31,28 @@ def decrypt_message(message, key):
             decrypted_message += characterset[new_index]
     return decrypted_message
 
-while True: 
-    user_input = input("Enter E for encrypt and D for decrypt: ").upper()
+#user interface
 
-    if user_input == "E":
-        key = int(input("Please enter the key as integer: "))
-        message = input("Enter the message you want to encrypt in lowercase: ")
-        encrypted_message = encrypt_message(message, key)
-        print(encrypted_message)
-        
-    elif user_input == "D":
-        key = int(input("Please enter the key as integer: "))
-        encrypted_message = input("Enter the message you want to decrypt: ")
-        decrypted_message = decrypt_message(encrypted_message, key)
-        print(decrypted_message)
-        
-    else: 
-        print("Invalid entry")
+st.set_page_config(page_title="Encryption/Decryption App", layout="centered")
+st.title("Message Encryptor & Decryptor")
+
+mode = st.radio("Select Mode:", ("Encrypt", "Decrypt"), horizontal=True)
+message = st.text_area("Enter your message here:", height=150)
+key = st.number_input("Enter the key (integer):", min_value=1, step=1)
+
+#action button
+if st.button("Run"):
+    if not message:
+        st.warning("Please enter a message to proceed.")
+    else:
+        if mode == "Encrypt":
+            result = encrypt_message(message, key)
+            st.success("Message Encrypted successfully!")
+        else:
+            result = decrypt_message(message, key)
+            st.success("Message Decrypted successfully!")
             
-    print("Would you like to encrypt/decrypt another message?")
-    choice = input("yes or no?: ").lower()
-    if choice != "yes":
-        print("Thank you for using the encryption/decryption program. Goodbye!")
-        break
+    st.text_area("Result:", value=result, height=150)
+    
+    st.code(result, language="text")
+
