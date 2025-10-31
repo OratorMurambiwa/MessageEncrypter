@@ -1,0 +1,9 @@
+
+---
+
+## 📦 `requirements.txt`
+
+```txt
+streamlit>=1.29.0
+pydub>=0.25.1
+mutagen>=1.47.0
